@@ -89,11 +89,9 @@ void loggg(int i)
         if (x[i] * x[i - 1] < 0 || y[i] * y[i - 1] < 0) {
             dist = 0;
         }
-        dist += sqrt(x[i] * x[i] + y[i] * y[i]) * 9.8 * 0.01 / 2;
     }
-    else {
-        dist = sqrt(x[i] * x[i] + y[i] * y[i]) * 9.8 * 0.01 / 2;
-    }
+    dist += sqrt(x[i] * x[i] + y[i] * y[i]) * 9.8 * 100 * 0.01 / 2;
+    pc.printf("%lf\n", dist);
     if (dist > 5) {
         displace[i] = 1;
     }
@@ -116,13 +114,13 @@ void event_logger()
 void output()
 {
     for (int i = 0; i < 100; i++) {
-        wait(0.1);
+        wait(0.02);
         pc.printf("%f ", x[i]);
-        wait(0.1);
+        wait(0.02);
         pc.printf("%f ", y[i]);
-        wait(0.1);
+        wait(0.02);
         pc.printf("%f ", z[i]);
-        wait(0.1);
+        wait(0.02);
         pc.printf("%d\r\n", displace[i]);
         // wait(0.1);
         // pc.printf("%f\r\n", x[i]);
