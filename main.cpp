@@ -32,7 +32,7 @@ DigitalOut led(LED1);
 int m_addr = FXOS8700CQ_SLAVE_ADDR1;
 float t[3], x[100], y[100], z[100];
 int displace[100];
-double dist;
+double dist, v1, v2;
 Thread thread;
 Thread logthread;
 EventQueue queue;
@@ -85,11 +85,11 @@ void loggg(int i)
     x[i] = t[0];
     y[i] = t[1];
     z[i] = t[2];
-    if (i > 0) {
-        if (x[i] * x[i - 1] < 0 || y[i] * y[i - 1] < 0) {
-            dist = 0;
-        }
+    if ((v1 + x[i] * 0.1) * v1 < 0 || (v2 + y[i] * 0.1) * v2 < 0) {
+        dist = 0;
     }
+    v1 = v1 + x[i] * 0.1;
+    v2 = v2 + y[i] * 0.1;
     dist += sqrt(x[i] * x[i] + y[i] * y[i]) * 9.8 * 100 * 0.01 / 2;
     // pc.printf("%lf\n", dist);
     if (dist > 5) {
@@ -103,6 +103,8 @@ void loggg(int i)
 void event_logger()
 {
     dist = 0;
+    v1 = 0;
+    v2 = 0;
     for (int i = 0; i < 100; i++) {
         led = !led;
         logqueue.call(&loggg, i);
